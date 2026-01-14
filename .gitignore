@@ -1,0 +1,57 @@
+# ----------------------------------
+# Python
+# ----------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv/
+venv/
+
+# ----------------------------------
+# Django
+# ----------------------------------
+*.log
+staticfiles/
+media/
+local_settings.py
+
+# ----------------------------------
+# Databases (SQLite / CR-SQLite)
+# ----------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# If you want to track schema but not data
+server/db.sqlite3
+local_content.db
+
+# ----------------------------------
+# Quarto
+# ----------------------------------
+.quarto/
+_site/
+*_files/
+*_cache/
+qmd/
+
+# ----------------------------------
+# Build / artifacts
+# ----------------------------------
+dist/
+build/
+*.zip
+
+# ----------------------------------
+# OS / Editor noise
+# ----------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

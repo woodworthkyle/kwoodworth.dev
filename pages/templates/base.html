@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Your Site{% endblock %}</title>
+  <meta name="description" content="{% block description %}A clean, responsive personal site.{% endblock %}">
+  <link rel="stylesheet" href="{% static 'pages/css/site.css' %}" />
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <a class="brand__title" href="/">Your Name</a>
+      </div>
+
+      <nav class="menubar" aria-label="Primary">
+        <ul class="menu">
+          {% for item in site_nav_tree %}
+            <li class="menu__item {% if item.children %}has-sub{% endif %}">
+              <a class="menu__link" href="{{ item.url }}" {% if request.path == item.url %}aria-current="page"{% endif %}>{{ item.title }}{% if item.children %}<span class="menu__chev" aria-hidden="true">▾</span>{% endif %}</a>
+              {% if item.children %}
+                <ul class="submenu" aria-label="{{ item.title }} submenu">
+                  {% for child in item.children %}
+                    {% include "pages/_menu_node.html" with node=child %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+
+          <li class="menu__item">
+            <a class="menu__link" href="{% url 'pages:posts' %}" {% if request.resolver_match.url_name == 'posts' %}aria-current="page"{% endif %}>The Notebook</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="topbar__actions">
+        <button class="iconbtn" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <span class="iconbtn__dot" aria-hidden="true"></span>
+        </button>
+        <button class="iconbtn iconbtn--menu" id="menuToggle" type="button" aria-expanded="false" aria-controls="drawer">☰</button>
+      </div>
+    </div>
+
+    <div class="drawer" id="drawer" hidden>
+      <div class="drawer__inner">
+        <div class="drawer__head">
+          <div class="drawer__title">Menu</div>
+          <button class="iconbtn" id="menuClose" type="button" aria-label="Close menu">✕</button>
+        </div>
+
+        <nav class="drawer__nav" aria-label="Mobile primary">
+          <div id="drawerNav"></div>
+</nav>
+      </div>
+    </div>
+  </header>
+
+  {% block body %}{% endblock %}
+
+  <script>
+    window.__NAV_TREE__ = {{ site_nav_tree_json|safe }};
+    window.__NAV_TREE__.push({title: 'The Notebook', url: '{% url "pages:posts" %}', children: []});
+  </script>
+  <script src="{% static 'pages/js/site.js' %}"></script>
+</body>
+</html>

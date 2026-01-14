@@ -1,0 +1,14 @@
+<div class="rail__title">{{ title }}</div>
+
+{% if tag_labels %}
+  <div class="chips">
+    {% for key,label in tag_labels.items %}
+      <a class="chip {% if current_tag == key %}is-active{% endif %}"
+         href="{% url url_name %}{% if key != 'all' %}?tag={{ key }}{% endif %}">{{ label }}</a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card subtle">
+    <p class="muted">No categories yet.</p>
+  </div>
+{% endif %}

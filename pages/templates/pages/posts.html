@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load widgets %}
+{% block title %}The Notebook — Your Name{% endblock %}
+
+{% block body %}
+<main class="layout layout--wide">
+  <aside class="rail rail--left" aria-label="Categories">
+  {% categories_widget title="Categories" %}
+  <div class="card subtle">
+    <div class="meta">Tips</div>
+    <p class="muted">Filter posts by tag. Tags come from the database.</p>
+  </div>
+</aside>
+
+  <section id="content" class="content prose">
+    <header class="pagehead">
+      <h1>The Notebook</h1>
+      <p class="lede">Essays, notes, and occasional rants.</p>
+    </header>
+
+    <div class="postlist">
+      {% for p in posts %}
+        <article class="postcard">
+          <h2 class="postcard__title">
+            <a href="{% url 'pages:post' slug=p.slug %}">{{ p.title }}</a>
+          </h2>
+
+          <div class="postcard__meta">
+            {% for t in p.tags.all %}
+              <span class="pill">{{ t.slug|upper }}</span>
+            {% endfor %}
+            <span class="dot">•</span>
+            <time datetime="{{ p.date }}">{{ p.date }}</time>
+          </div>
+
+          <p class="postcard__excerpt">{{ p.summary }}</p>
+        </article>
+      {% empty %}
+        <p class="muted">No posts found.</p>
+      {% endfor %}
+    </div>
+
+    <footer class="pagefoot">
+      <div class="divider"></div>
+      <p class="muted">© <span id="year"></span> Your Name.</p>
+    </footer>
+  </section>
+
+  <aside class="rail rail--right" aria-label="About">
+  {% biography_widget title="About" %}
+</aside>
+</main>
+{% endblock %}

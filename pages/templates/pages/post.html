@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load widgets %}
+{% block title %}{{ post.title }} — Your Name{% endblock %}
+{% block description %}{{ post.summary }}{% endblock %}
+
+{% block body %}
+{% url 'pages:posts' as posts_url %}
+<main class="layout">
+  <aside class="rail rail--left" aria-label="Back">
+  {% navigator_widget title="Notebook" back_label="All posts" back_url=posts_url %}
+</aside>
+
+  <article id="content" class="content prose">
+    <header class="pagehead">
+      <h1>{{ post.title }}</h1>
+      <div class="byline">
+        <span>By Your Name</span>
+        <span class="dot">•</span>
+        <time datetime="{{ post.date }}">{{ post.date }}</time>
+      </div>
+    </header>
+
+    <p class="lede">{{ post.summary }}</p>
+
+    {% for heading, text in post.sections %}
+      {% if heading|length <= 4 %}
+        <h3>{{ heading }}</h3>
+      {% else %}
+        <h2>{{ heading }}</h2>
+      {% endif %}
+      <p>{{ text }}</p>
+    {% endfor %}
+
+    <blockquote>Short pull quote / blockquote. Sharp. Not too precious.</blockquote>
+
+    <footer class="pagefoot">
+      <div class="divider"></div>
+      <p class="muted">© <span id="year"></span> Your Name.</p>
+    </footer>
+  </article>
+
+  <aside class="rail rail--right" aria-label="Table of contents">
+  {% toc_widget title="Contents" %}
+</aside>
+</main>
+{% endblock %}

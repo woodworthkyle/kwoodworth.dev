@@ -1,0 +1,13 @@
+<div class="rail__title">{{ title }}</div>
+<div class="card subtle">
+  {% if bio %}
+    <p class="muted">{{ bio }}</p>
+  {% endif %}
+  {% if links %}
+    <div class="stack">
+      {% for l in links %}
+        <a href="{{ l.href }}"{% if l.external %} rel="noopener" target="_blank"{% endif %}>{{ l.label }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

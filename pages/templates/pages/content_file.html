@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load widgets %}
+{% block title %}{{ title }} — Your Name{% endblock %}
+{% block body %}
+<main class="layout">
+  {% comment %}Left rail widgets{% endcomment %}
+  <aside class="rail rail--left" aria-label="Navigation">
+    {% navigator_widget title="Path" breadcrumbs=breadcrumbs %}
+  </aside>
+
+  <article id="content" class="content prose">
+    <header class="pagehead">
+      <h1>{{ title }}</h1>
+    </header>
+
+    <div class="content-html">
+      {{ html|safe }}
+    </div>
+
+    <footer class="pagefoot">
+      <div class="divider"></div>
+      <p class="muted">© <span id="year"></span> Your Name.</p>
+    </footer>
+  </article>
+
+  {% comment %}Right rail widgets{% endcomment %}
+  <aside class="rail rail--right" aria-label="Table of contents">
+    {% toc_widget title="Contents" %}
+    <div class="card subtle">
+      <div class="meta">Source</div>
+      <p class="muted">Served from <code>content/</code>.</p>
+    </div>
+  </aside>
+</main>
+{% endblock %}

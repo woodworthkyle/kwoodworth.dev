@@ -1,0 +1,1331 @@
+:root{
+  --bg:#fbfbfc;--fg:#101114;--muted:#5a5f6a;--hair:rgba(16,17,20,.10);
+  --card:rgba(16,17,20,.04);--accent:#2a5bd7;--accent2:#7a3aed;
+  --measure:68ch;--radius:14px;--shadow:0 8px 30px rgba(0,0,0,.08);
+  --sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  --serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#0b0c10;--fg:#eaecf2;--muted:#a8afbd;--hair:rgba(234,236,242,.14);
+  --card:rgba(234,236,242,.06);--accent:#7aa2ff;--accent2:#c4a7ff;
+  --shadow:0 12px 44px rgba(0,0,0,.42);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){
+    --bg:#0b0c10;--fg:#eaecf2;--muted:#a8afbd;--hair:rgba(234,236,242,.14);
+    --card:rgba(234,236,242,.06);--accent:#7aa2ff;--accent2:#c4a7ff;
+    --shadow:0 12px 44px rgba(0,0,0,.42);
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+[hidden]{display:none!important}
+.skip{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:var(--bg);border:1px solid var(--hair);border-radius:10px;z-index:1000}
+
+/* Topbar */
+.topbar{position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:color-mix(in oklab,var(--bg),transparent 18%);border-bottom:1px solid var(--hair)}
+.topbar__inner{max-width:1120px;margin:0 auto;padding:14px 18px;display:flex;gap:14px;align-items:center;justify-content:space-between}
+.brand__title{font-weight:700;letter-spacing:-0.02em;color:var(--fg)}
+.brand__title:hover{text-decoration:none;opacity:.92}
+.nav{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center}
+.nav a{color:var(--fg);opacity:.86;font-size:14px;padding:6px 8px;border-radius:10px}
+.nav a[aria-current="page"]{opacity:1;background:var(--card);border:1px solid var(--hair)}
+.nav a:hover{text-decoration:none;opacity:1;background:color-mix(in oklab,var(--card),transparent 35%)}
+.topbar__actions{display:flex;gap:10px;align-items:center}
+.iconbtn{border:1px solid var(--hair);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.iconbtn__dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-block}
+.iconbtn--menu{display:none}
+.mobileNav{max-width:1120px;margin:0 auto;padding:0 18px 14px 18px;display:grid;gap:8px}
+.mobileNav a{padding:10px 12px;border:1px solid var(--hair);background:var(--card);border-radius:12px;color:var(--fg);opacity:.9}
+
+/* Grid areas */
+.rail--left{grid-area:left}
+.content{grid-area:content;min-width:0}
+.rail--right{grid-area:right}
+
+/* Desktop: 3 columns */
+.layout{max-width:1120px;margin:0 auto;padding:22px 18px 56px 18px;display:grid;grid-template-columns:260px minmax(0,1fr) 260px;grid-template-areas:"left content right";gap:22px}
+.layout--wide{grid-template-columns:280px minmax(0,1fr) 240px;grid-template-areas:"left content right"}
+.rail{position:sticky;top:74px;align-self:start;max-height:calc(100vh - 94px);overflow:auto;padding-right:4px}
+.rail__title{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:10px 0 12px 0}
+.rail__nav{display:grid;gap:6px;margin-bottom:16px}
+.rail__nav a{color:var(--fg);opacity:.84;padding:8px 10px;border-radius:12px;border:1px solid transparent}
+.rail__nav a:hover{text-decoration:none;opacity:1;background:var(--card);border-color:var(--hair)}
+
+/* Tablet-ish: rails on top row, content spans below */
+@media (max-width:980px){
+  .layout,.layout--wide{grid-template-columns:1fr 1fr;grid-template-areas:"left right" "content content";align-items:start}
+  .rail{position:relative;top:auto;max-height:none;overflow:visible}
+  .rail--right{display:block}
+  .nav{display:none}
+  .iconbtn--menu{display:inline-flex}
+}
+
+/* Mobile: left above content; right hidden */
+@media (max-width:760px){
+  .layout,.layout--wide{grid-template-columns:1fr;grid-template-areas:"left" "content"}
+  .rail--right{display:none!important}
+  .rail{position:relative;top:auto;max-height:none;overflow:visible}
+}
+
+/* Prose */
+.prose{max-width:var(--measure)}
+.pagehead h1{font-family:var(--serif);letter-spacing:-0.02em;margin:10px 0 10px 0;line-height:1.12;font-size:clamp(30px,4vw,44px)}
+.lede{color:var(--muted);font-size:18px;line-height:1.6;margin:0 0 18px 0}
+.prose h2,.prose h3{font-family:var(--serif);letter-spacing:-0.01em;margin-top:28px;margin-bottom:10px}
+.prose h2{font-size:26px;line-height:1.2}
+.prose h3{font-size:20px;line-height:1.25}
+.prose p,.prose li{font-size:16px;line-height:1.72}
+.prose p{margin:0 0 14px 0}
+.prose ul{padding-left:18px}
+blockquote{margin:18px 0;padding:14px 16px;border-left:4px solid var(--accent);background:color-mix(in oklab,var(--card),transparent 10%);border-radius:12px;color:color-mix(in oklab,var(--fg),var(--muted) 20%)}
+code,pre{font-family:var(--mono)}
+pre{padding:14px;border:1px solid var(--hair);background:color-mix(in oklab,var(--card),transparent 10%);border-radius:12px;overflow:auto}
+
+/* UI bits */
+.card{border:1px solid var(--hair);border-radius:var(--radius);background:var(--bg);box-shadow:var(--shadow);padding:14px;margin-top:12px}
+.card.subtle{box-shadow:none;background:color-mix(in oklab,var(--card),transparent 25%)}
+.meta{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.stack{display:grid;gap:8px}
+.muted{color:var(--muted)}
+.divider{height:1px;background:var(--hair);margin:22px 0}
+.byline{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:14px}
+.dot{opacity:.7}
+.postlist{display:grid;gap:12px;margin-top:14px}
+.postcard{border:1px solid var(--hair);border-radius:var(--radius);background:color-mix(in oklab,var(--card),transparent 12%);padding:14px}
+.postcard__title{margin:0 0 6px 0;font-family:var(--serif);letter-spacing:-0.01em;font-size:22px}
+.postcard__title a{color:var(--fg);text-decoration:none}
+.postcard__title a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.postcard__meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:13px;margin-bottom:8px}
+.postcard__excerpt{margin:0;color:color-mix(in oklab,var(--fg),var(--muted) 28%)}
+.pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;border:1px solid var(--hair);background:color-mix(in oklab,var(--bg),transparent 0%);color:var(--fg);opacity:.9;font-size:12px}
+.posttags{display:flex;gap:6px;flex-wrap:wrap}
+.toc{display:grid;gap:6px}
+.toc a{color:var(--fg);opacity:.78;font-size:14px;padding:6px 8px;border-radius:10px;border:1px solid transparent;text-decoration:none}
+.toc a:hover{opacity:1;background:var(--card);border-color:var(--hair)}
+.toc a[data-depth="3"]{padding-left:18px;font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;cursor:pointer;border:1px solid var(--hair);background:color-mix(in oklab,var(--card),transparent 10%);color:var(--fg);padding:7px 10px;border-radius:999px;font-size:13px;opacity:.9;text-decoration:none}
+.chip:hover{opacity:1;text-decoration:none}
+.chip.is-active{border-color:color-mix(in oklab,var(--accent),var(--hair) 35%);box-shadow:0 0 0 3px color-mix(in oklab,var(--accent),transparent 82%);opacity:1}
+.pagefoot{margin-top:26px}
+
+/* ===== Menu system ===== */
+
+/* Desktop menubar (dropdown) */
+.menubar{display:block}
+.menu{list-style:none;margin:0;padding:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.menu__item{position:relative}
+.menu__link{color:var(--fg);opacity:.86;font-size:14px;padding:8px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:8px}
+.menu__link:hover{text-decoration:none;opacity:1;background:color-mix(in oklab,var(--card),transparent 35%)}
+.menu__link[aria-current="page"]{opacity:1;background:var(--card);border:1px solid var(--hair)}
+.menu__item.has-sub > .menu__link::after{content:"▾";font-size:12px;opacity:.75;margin-left:2px}
+
+/* Submenu base */
+.submenu{list-style:none;margin:0;padding:8px;position:absolute;top:100%;left:0;min-width:240px;transform:translateY(8px);
+  background:var(--bg);border:1px solid var(--hair);border-radius:14px;box-shadow:var(--shadow);
+  display:none;z-index:200;
+}
+.submenu__item{position:relative}
+.submenu__link{display:flex;justify-content:space-between;align-items:center;padding:10px 10px;border-radius:12px;color:var(--fg);opacity:.9}
+.submenu__link:hover{text-decoration:none;opacity:1;background:color-mix(in oklab,var(--card),transparent 15%)}
+.submenu__link[aria-current="page"]{opacity:1;background:var(--card);border:1px solid var(--hair)}
+.submenu__item.has-sub > .submenu__link::after{content:"›";opacity:.7}
+
+/* Nested submenus fly out right */
+.submenu--nested{top:0;left:100%;transform:translateX(8px)}
+
+/* Open on hover + keyboard focus */
+.menu__item.has-sub:hover > .submenu,
+.menu__item.has-sub:focus-within > .submenu{display:block}
+.submenu__item.has-sub:hover > .submenu,
+.submenu__item.has-sub:focus-within > .submenu{display:block}
+
+/* Drawer (tablet/mobile) */
+.drawer{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.38);backdrop-filter:blur(3px)}
+.drawer__inner{position:absolute;left:0;top:0;height:100%;width:min(420px,92vw);background:var(--bg);
+  border-right:1px solid var(--hair);box-shadow:var(--shadow);display:flex;flex-direction:column;
+}
+.drawer__head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--hair)}
+.drawer__title{font-weight:700;letter-spacing:-0.01em}
+.drawer__nav{padding:12px 12px 18px 12px;overflow:auto;display:grid;gap:10px}
+.drawer__leaf{display:flex;align-items:center;justify-content:space-between;padding:12px 12px;border:1px solid var(--hair);
+  background:color-mix(in oklab,var(--card),transparent 10%);border-radius:14px;color:var(--fg);text-decoration:none;opacity:.95}
+.drawer__leaf:hover{text-decoration:none;opacity:1}
+
+/* Accordion groups */
+.acc{border:1px solid var(--hair);border-radius:16px;overflow:hidden;background:color-mix(in oklab,var(--card),transparent 10%)}
+.acc__top{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;background:transparent;
+  padding:12px 12px;color:var(--fg);cursor:pointer;font:inherit}
+.acc__top:hover{background:color-mix(in oklab,var(--card),transparent 0%)}
+.acc__chev{opacity:.7;transition:transform .15s ease}
+.acc[aria-expanded="true"] .acc__chev{transform:rotate(180deg)}
+.acc__panel{display:none;padding:0 10px 10px 10px}
+.acc[aria-expanded="true"] .acc__panel{display:grid;gap:8px}
+.acc__child{display:flex;align-items:center;justify-content:space-between;padding:10px 10px;border:1px solid var(--hair);
+  border-radius:14px;background:var(--bg);color:var(--fg);text-decoration:none;opacity:.92}
+.acc__child:hover{text-decoration:none;opacity:1}
+.acc__child--indent{padding-left:18px}
+
+/* Show/hide based on breakpoints */
+@media (max-width:980px){
+  .menubar{display:none}
+  .iconbtn--menu{display:inline-flex}
+}
+@media (min-width:981px){
+  .drawer{display:none!important}
+}
+
+/* Hide older nav blocks */
+.nav,.mobileNav{display:none!important}
+
+/* ===== Drawer peep-hole fix =====
+   Ensure the overlay fills the viewport and the nav can scroll fully.
+*/
+.topbar{overflow:visible}
+.drawer{height:100vh}
+.drawer__inner{max-height:100vh}
+.drawer__nav{flex:1; min-height:0; overflow:auto; -webkit-overflow-scrolling:touch}
+
+/* Notebook link styling (mobile drawer) */
+.drawer__leaf{
+  padding:10px 10px;
+  background:var(--bg);
+  border-radius:14px;
+}
+
+/* ===== Drawer link sizing fix ===== */
+.drawer__link{
+  display:block;
+  padding:10px 12px;
+  border-radius:12px;
+  color:var(--fg);
+  text-decoration:none;
+  opacity:.9;
+}
+.drawer__link:hover{
+  text-decoration:none;
+  opacity:1;
+  background:color-mix(in oklab,var(--card),transparent 20%);
+}
+.drawer__link:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+
+/* Make leaf tiles less 'giant button' if they appear */
+.drawer__leaf{
+  padding:10px 12px;
+  border-radius:12px;
+  background:color-mix(in oklab,var(--card),transparent 18%);
+}
+
+/* ===== Mobile drawer leaf normalization =====
+   Make top-level leaf links (including Notebook) look like standard nav rows.
+*/
+.drawer__leaf{
+  background:var(--bg);
+  border:1px solid var(--hair);
+  padding:10px 10px;
+  border-radius:14px;
+  box-shadow:none;
+}
+
+/* ===== Desktop dropdown hover bridge =====
+   Prevent submenu from disappearing when moving the pointer from the top item
+   to the dropdown by removing layout gaps + adding an invisible hover buffer.
+*/
+.menu__item.has-sub::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:100%;
+  height:10px; /* hover buffer */
+}
+.submenu{ margin-top:0; }
+
+/* ===== Desktop menubar restyle (WYSIWYG-like) =====
+   Goal: horizontally spaced text links (not pill buttons), subtle underline/active state,
+   dropdown panels with modest rounding, keeping current color scheme.
+*/
+@media (min-width:981px){
+  .menu{gap:22px; justify-content:flex-start}
+  .menubar{margin-left:8px}
+  .menu__link{
+    padding:6px 0;
+    border-radius:0;
+    background:transparent;
+    border:0;
+    opacity:.9;
+    font-size:14px;
+    position:relative;
+  }
+  .menu__link:hover{
+    background:transparent;
+    text-decoration:none;
+    opacity:1;
+  }
+  /* underline hover */
+  .menu__link::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-6px;
+    height:2px;
+    background:color-mix(in oklab,var(--accent),transparent 35%);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .15s ease;
+    border-radius:2px;
+  }
+  .menu__item:hover > .menu__link::after,
+  .menu__item:focus-within > .menu__link::after{
+    transform:scaleX(1);
+  }
+  .menu__link[aria-current="page"]{
+    opacity:1;
+    background:transparent;
+    border:0;
+  }
+  .menu__link[aria-current="page"]::after{
+    transform:scaleX(1);
+    background:var(--accent);
+  }
+
+  .menu__item.has-sub > .menu__link::before{
+    content:"▾";
+    font-size:11px;
+    opacity:.75;
+    margin-left:0;
+    position:absolute;
+    right:-14px;
+    top:7px;
+  }
+  /* disable old ::after chevron */
+  .menu__item.has-sub > .menu__link::after{
+    /* keep underline via ::after above; chevron moved to ::before */
+  }
+
+  /* Dropdown panels */
+  .submenu{
+    border-radius:10px;
+    padding:6px;
+    min-width:220px;
+    box-shadow:0 12px 40px rgba(0,0,0,.14);
+  }
+  :root[data-theme="dark"] .submenu{
+    box-shadow:0 16px 54px rgba(0,0,0,.55);
+  }
+  .submenu__link{
+    padding:9px 10px;
+    border-radius:8px;
+    font-size:14px;
+  }
+  .submenu__link:hover{
+    background:color-mix(in oklab,var(--card),transparent 0%);
+  }
+  .submenu__link[aria-current="page"]{
+    border:0;
+    background:color-mix(in oklab,var(--card),transparent 0%);
+  }
+
+  /* Flyout indicator */
+  .submenu__item.has-sub > .submenu__link::after{
+    content:"›";
+    opacity:.6;
+  }
+
+  /* Make the menubar feel like a strip: slightly reduce topbar padding */
+  .topbar__inner{padding-top:12px;padding-bottom:12px}
+}
+
+/* ===== Desktop submenu restyle (WYSIWYG-like) =====
+   - Rectangular dropdown panel
+   - Full-width rows
+   - Subtle separators
+   - Clear hover highlight
+   - Flyout submenus aligned and crisp
+*/
+@media (min-width:981px){
+  .submenu{
+    background:color-mix(in oklab,var(--bg),white 0%);
+    border:1px solid color-mix(in oklab,var(--fg),transparent 85%);
+    border-radius:6px;
+    padding:4px 0;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    transform:translateY(6px); /* keep a little visual spacing, no hover gap */
+  }
+  :root[data-theme="dark"] .submenu{
+    background:color-mix(in oklab,var(--bg),black 0%);
+    border-color:color-mix(in oklab,var(--fg),transparent 82%);
+    box-shadow:0 18px 54px rgba(0,0,0,.55);
+  }
+
+  .submenu__item + .submenu__item{
+    border-top:1px solid color-mix(in oklab,var(--fg),transparent 88%);
+  }
+
+  .submenu__link{
+    width:100%;
+    border-radius:0;
+    padding:9px 12px;
+    line-height:1.2;
+    font-size:14px;
+    opacity:.92;
+    background:transparent;
+  }
+  .submenu__link:hover{
+    background:color-mix(in oklab,var(--accent),transparent 88%);
+    opacity:1;
+  }
+  .submenu__link[aria-current="page"]{
+    background:color-mix(in oklab,var(--accent),transparent 86%);
+    opacity:1;
+  }
+
+  /* Flyout submenu: align flush to the right edge with a small offset */
+  .submenu--nested{
+    border-radius:6px;
+    padding:4px 0;
+    transform:translateX(6px);
+  }
+
+  /* Reduce "cardy" feel */
+  .submenu__item.has-sub > .submenu__link::after{
+    content:"▶"; /* small right-pointing triangle */
+    font-size:10px;
+    opacity:.65;
+  }
+
+  /* Improve hover bridge for nested submenus too */
+  .submenu__item.has-sub::after{
+    content:"";
+    position:absolute;
+    top:0;
+    right:-10px;
+    width:10px;
+    height:100%;
+  }
+}
+
+/* ===== Submenus like main menu (different panel color) =====
+   Intent: submenu items look like the top-level text links (underline on hover/active),
+   but the dropdown panel has a subtly different background tint.
+*/
+@media (min-width:981px){
+  .submenu{
+    background:color-mix(in oklab,var(--bg),var(--card) 55%);
+    border:1px solid color-mix(in oklab,var(--fg),transparent 86%);
+    border-radius:8px;
+    padding:10px 14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+  }
+
+  /* remove row separators + row highlighting from previous styles */
+  .submenu__item + .submenu__item{border-top:0}
+
+  .submenu__link{
+    padding:6px 0;
+    border-radius:0;
+    background:transparent;
+    border:0;
+    opacity:.9;
+    font-size:14px;
+    position:relative;
+    justify-content:flex-start;
+  }
+  .submenu__link:hover{
+    background:transparent;
+    opacity:1;
+  }
+
+  /* underline hover, like main menu */
+  .submenu__link::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-6px;
+    height:2px;
+    background:color-mix(in oklab,var(--accent),transparent 40%);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .15s ease;
+    border-radius:2px;
+  }
+  .submenu__item:hover > .submenu__link::before,
+  .submenu__item:focus-within > .submenu__link::before{
+    transform:scaleX(1);
+  }
+
+  .submenu__link[aria-current="page"]{
+    opacity:1;
+  }
+  .submenu__link[aria-current="page"]::before{
+    transform:scaleX(1);
+    background:var(--accent);
+  }
+
+  /* flyout indicator matches style (subtle) */
+  .submenu__item.has-sub > .submenu__link::after{
+    content:"▸";
+    font-size:11px;
+    opacity:.65;
+    margin-left:auto;
+  }
+
+  /* nested panel should use same treatment */
+  .submenu--nested{
+    background:color-mix(in oklab,var(--bg),var(--card) 55%);
+    border-radius:8px;
+    padding:10px 14px;
+    transform:translateX(6px);
+  }
+}
+
+/* ===== Horizontal sub-menus (WYSIWYG-style) =====
+   Submenus appear as horizontal bars beneath the main menu,
+   using the same link styling as top-level items.
+*/
+@media (min-width:981px){
+  /* First-level submenu becomes horizontal bar */
+  .menu__item > .submenu{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    display:none;
+    flex-direction:row;
+    gap:22px;
+    align-items:center;
+    justify-content:flex-start;
+    padding:10px 16px;
+    background:color-mix(in oklab,var(--bg),var(--card) 55%);
+    border:1px solid color-mix(in oklab,var(--fg),transparent 86%);
+    border-left:0;
+    border-right:0;
+    border-radius:0;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+  }
+
+  /* Show on hover/focus */
+  .menu__item.has-sub:hover > .submenu,
+  .menu__item.has-sub:focus-within > .submenu{
+    display:flex;
+  }
+
+  /* Submenu items inline */
+  .submenu__item{
+    position:relative;
+  }
+
+  .submenu__link{
+    padding:6px 0;
+    font-size:14px;
+    border-radius:0;
+    background:transparent;
+  }
+
+  /* Underline hover/active (same as main menu) */
+  .submenu__link::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-6px;
+    height:2px;
+    background:color-mix(in oklab,var(--accent),transparent 40%);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .15s ease;
+  }
+  .submenu__item:hover > .submenu__link::before,
+  .submenu__item:focus-within > .submenu__link::before{
+    transform:scaleX(1);
+  }
+  .submenu__link[aria-current="page"]::before{
+    transform:scaleX(1);
+    background:var(--accent);
+  }
+
+  /* Disable vertical flyouts for now */
+  .submenu--nested{
+    position:static;
+    display:contents;
+    transform:none;
+    background:none;
+    border:0;
+    box-shadow:none;
+    padding:0;
+  }
+}
+
+
+/* ===== Full-width slide-under horizontal submenus =====
+   Makes the horizontal submenu feel like it slides out from underneath the sticky topbar.
+*/
+@media (min-width:981px){
+  /* Ensure submenu isn't constrained by parent list item */
+  .menu__item{ position:static; }
+
+  .menu__item > .submenu{
+    position:fixed;
+    left:0;
+    right:0;
+    top:var(--topbar-h, 60px);
+    width:100vw;
+
+    display:flex; /* keep flex for animation */
+    flex-direction:row;
+    gap:24px;
+    align-items:center;
+    justify-content:center;
+
+    padding:12px 18px;
+    background:color-mix(in oklab,var(--bg),var(--card) 60%);
+    border-top:1px solid color-mix(in oklab,var(--fg),transparent 86%);
+    border-bottom:1px solid color-mix(in oklab,var(--fg),transparent 86%);
+    border-left:0;
+    border-right:0;
+    border-radius:0;
+    box-shadow:none;
+
+    opacity:0;
+    transform:translateY(-10px);
+    pointer-events:none;
+    visibility:hidden;
+    transition:opacity .14s ease, transform .14s ease, visibility 0s linear .14s;
+    z-index:240; /* above content, below drawer */
+  }
+
+  .menu__item.has-sub:hover > .submenu,
+  .menu__item.has-sub:focus-within > .submenu{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+    visibility:visible;
+    transition:opacity .14s ease, transform .14s ease;
+  }
+
+  /* Links in the bar look like main menu links (underline) */
+  .submenu__link{
+    padding:6px 0;
+    border-radius:0;
+    background:transparent;
+    font-size:14px;
+    position:relative;
+  }
+  .submenu__link::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-6px;
+    height:2px;
+    background:color-mix(in oklab,var(--accent),transparent 40%);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .15s ease;
+  }
+  .submenu__item:hover > .submenu__link::before,
+  .submenu__item:focus-within > .submenu__link::before{
+    transform:scaleX(1);
+  }
+  .submenu__link[aria-current="page"]::before{
+    transform:scaleX(1);
+    background:var(--accent);
+  }
+
+  /* Remove flyout cues in this mode */
+  .submenu__item.has-sub > .submenu__link::after{ content:""; }
+  .submenu--nested{ display:none !important; }
+}
+
+
+/* ===== Full-width submenu glitch fixes =====
+   - Make submenu background fully opaque
+   - Keep dropdown trigger triangle within link hitbox
+   - Add a small hover buffer to prevent flicker while crossing edges
+*/
+@media (min-width:981px){
+  /* Opaque bar */
+  .menu__item > .submenu{
+    background:var(--bg);
+    /* if you prefer slightly different tint but still opaque, swap to: background: var(--card); */
+    opacity:0;
+    /* reduce travel to minimize hover loss during animation */
+    transform:translateY(-6px);
+  }
+  .menu__item.has-sub:hover > .submenu,
+  .menu__item.has-sub:focus-within > .submenu{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* Put the ▾ inside the link bounds (no negative right offset hitbox weirdness) */
+  .menu__link{
+    padding-right:18px;
+  }
+  .menu__item.has-sub > .menu__link::before{
+    right:0;
+    top:7px;
+  }
+
+  /* Hover buffer under the menu item to bridge to the bar */
+  .menu__item.has-sub::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    height:14px;
+    background:transparent;
+  }
+
+  /* Remove any delayed visibility switching that can cause momentary dismiss */
+  .menu__item > .submenu{
+    visibility:hidden;
+    transition:opacity .12s ease, transform .12s ease, visibility 0s linear .12s;
+  }
+  .menu__item.has-sub:hover > .submenu,
+  .menu__item.has-sub:focus-within > .submenu{
+    visibility:visible;
+    transition:opacity .12s ease, transform .12s ease;
+  }
+}
+
+
+/* ===== Desktop menu final hover/triangle cleanup =====
+   Fixes:
+   - flicker when moving from top link to full-width bar (remove hover buffer artifact)
+   - submenu shouldn't appear when hovering below main menu unless within item or bar
+   - remove duplicate triangles by eliminating pseudo-element conflicts
+*/
+@media (min-width:981px){
+  /* 1) Remove any hover-buffer pseudo elements added earlier */
+  .menu__item.has-sub::after{ content:none !important; }
+  .submenu__item.has-sub::after{ content:none !important; }
+
+  /* 2) Make submenu bar "touch" the topbar edge to avoid a dead gap */
+  .menu__item > .submenu{
+    top:calc(var(--topbar-h, 60px) - 1px);
+    transform:none;                 /* no translate gap */
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .12s ease, visibility 0s linear .12s;
+  }
+  .menu__item.has-sub:hover > .submenu,
+  .menu__item.has-sub:focus-within > .submenu,
+  .menu__item > .submenu:hover{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transition:opacity .12s ease;
+  }
+
+  /* 3) Stop using ::after for underline (it conflicted with old chevron rules).
+        Use background-image underline instead. */
+  .menu__link{
+    padding:6px 16px 6px 0;
+    background-image:linear-gradient(var(--accent), var(--accent));
+    background-repeat:no-repeat;
+    background-position:0 100%;
+    background-size:0% 2px;
+    transition:background-size .15s ease, opacity .15s ease;
+  }
+  .menu__item:hover > .menu__link,
+  .menu__item:focus-within > .menu__link{
+    background-size:100% 2px;
+    opacity:1;
+  }
+  .menu__link::after{ content:"" !important; } /* nuke any old pseudo chevrons/underlines */
+  .menu__link::before{ content:"" !important; }
+
+  /* Add a single chevron via a span-free approach */
+  .menu__item.has-sub > .menu__link{
+    position:relative;
+    padding-right:22px;
+  }
+  .menu__item.has-sub > .menu__link::after{
+    content:"▾" !important;
+    position:absolute;
+    right:0;
+    top:7px;
+    font-size:11px;
+    opacity:.75;
+  }
+
+  /* Active page underline */
+  .menu__link[aria-current="page"]{
+    background-size:100% 2px;
+    opacity:1;
+  }
+
+  /* 4) Submenu link underline matches main menu (different tint panel already handled) */
+  .submenu__link{
+    background-image:linear-gradient(var(--accent), var(--accent));
+    background-repeat:no-repeat;
+    background-position:0 100%;
+    background-size:0% 2px;
+    transition:background-size .15s ease, opacity .15s ease;
+  }
+  .submenu__item:hover > .submenu__link,
+  .submenu__item:focus-within > .submenu__link{
+    background-size:100% 2px;
+    opacity:1;
+  }
+  .submenu__link::before{ content:none !important; }
+  .submenu__link::after{ content:none !important; }
+
+  /* Keep submenu bar fully opaque */
+  .menu__item > .submenu{ background:var(--bg); }
+}
+
+
+/* ===== Inline chevron + stable hover bridge =====
+   - Chevron is real markup (part of link), not an overlay pseudo-element.
+   - Submenu stays open while crossing from link to the full-width bar.
+*/
+@media (min-width:981px){
+  /* Chevron as inline text */
+  .menu__chev{
+    display:inline-block;
+    margin-left:6px;
+    font-size:11px;
+    line-height:1;
+    opacity:.75;
+    transform:translateY(-1px);
+    pointer-events:none; /* hover is only about the link */
+  }
+
+  /* Remove any pseudo-element chevrons we previously used */
+  .menu__item.has-sub > .menu__link::before,
+  .menu__item.has-sub > .menu__link::after{
+    content:none !important;
+  }
+
+  /* Restore menu item positioning for hover bridge pseudo-element */
+  .menu__item{ position:relative; }
+
+  /* Conditional hover bridge: ONLY exists while the item is hovered/focused */
+  .menu__item.has-sub:hover::after,
+  .menu__item.has-sub:focus-within::after{
+    content:"";
+    position:fixed;
+    left:0;
+    right:0;
+    top:calc(var(--topbar-h, 60px) - 1px);
+    height:14px;
+    background:transparent;
+  }
+
+  /* Ensure submenu is directly adjacent to the bridge */
+  .menu__item > .submenu{
+    top:calc(var(--topbar-h, 60px) + 13px); /* bridge height - 1px overlap */
+  }
+
+  /* Keep open when hovering the bar itself */
+  .menu__item > .submenu:hover{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transition:opacity .12s ease;
+  }
+}
+
+
+/* ===== Desktop submenu: JS-controlled open state =====
+   We stop relying on :hover (which is brittle with fixed full-width bars) and instead
+   open/close submenus via a .is-open class managed by site.js.
+*/
+@media (min-width:981px){
+  /* Ensure default is closed */
+  .menu__item > .submenu{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+  /* Open state */
+  .menu__item.is-open > .submenu{
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+  }
+
+  /* Remove any previous hover-driven open rules so they don't fight JS */
+  .menu__item.has-sub:hover > .submenu,
+  .menu__item.has-sub:focus-within > .submenu,
+  .menu__item > .submenu:hover{
+    /* no-op; JS controls via .is-open */
+  }
+
+  /* Remove hover-bridge hacks (JS makes them unnecessary) */
+  .menu__item.has-sub:hover::after,
+  .menu__item.has-sub:focus-within::after{
+    content:none !important;
+  }
+
+  /* Give submenu bar a tiny top overlap to avoid a physical gap */
+  .menu__item > .submenu{
+    top:calc(var(--topbar-h, 60px) - 1px);
+  }
+}
+
+/* ===== Desktop menu hover style: background highlight (no underline) ===== */
+@media (min-width:981px){
+  /* Remove underline effects entirely */
+  .menu__link,
+  .submenu__link{
+    background-image:none !important;
+  }
+
+  /* Top-level hover/active */
+  .menu__item:hover > .menu__link,
+  .menu__item.is-open > .menu__link,
+  .menu__item:focus-within > .menu__link{
+    background-color:color-mix(in oklab,var(--card),var(--bg) 35%);
+    border-radius:4px;
+    opacity:1;
+  }
+
+  /* Active page */
+  .menu__link[aria-current="page"]{
+    background-color:color-mix(in oklab,var(--card),var(--bg) 25%);
+    opacity:1;
+  }
+
+  /* Submenu bar items */
+  .submenu__item:hover > .submenu__link,
+  .submenu__item:focus-within > .submenu__link{
+    background-color:color-mix(in oklab,var(--card),var(--bg) 35%);
+    border-radius:4px;
+  }
+
+  .submenu__link[aria-current="page"]{
+    background-color:color-mix(in oklab,var(--card),var(--bg) 25%);
+  }
+}
+
+/* ===== Desktop menu: remove any remaining underline + full-height highlight ===== */
+@media (min-width:981px){
+  /* Some earlier blocks used background-image underline; kill it everywhere */
+  .menu__link,
+  .submenu__link{
+    background-image:none !important;
+    background-size:0 0 !important;
+    background-repeat:no-repeat !important;
+  }
+
+  /* Make the topbar row stretch so highlights can fill the full height */
+  .topbar__inner{ align-items:stretch; }
+  .menubar{ align-self:stretch; }
+  .menu{ align-items:stretch; }
+
+  .menu__item{ display:flex; align-items:stretch; }
+  .menu__link{
+    display:flex;
+    align-items:center;
+    height:100%;
+    padding:0 12px;          /* no vertical padding so it fills the bar */
+    border-radius:0;         /* full-height block looks better square */
+  }
+
+  /* Darker full-height highlight */
+  .menu__item:hover > .menu__link,
+  .menu__item.is-open > .menu__link,
+  .menu__item:focus-within > .menu__link{
+    background-color:color-mix(in oklab,var(--card),var(--bg) 15%);
+    opacity:1;
+  }
+
+  .menu__link[aria-current="page"]{
+    background-color:color-mix(in oklab,var(--card),var(--bg) 8%);
+    opacity:1;
+  }
+}
+
+/* ===== Desktop menubar/menu match topbar height + dark hover ===== */
+:root{
+  --menu-hover-bg: #2b2f33; /* dark gray */
+  --menu-hover-fg: #ffffff; /* white */
+}
+
+@media (min-width:981px){
+  /* Make the entire topbar row a consistent height */
+  .topbar{ display:flex; }
+  .topbar__inner{
+    align-items:stretch;
+    width:100%;
+  }
+
+  .menubar{
+    align-self:stretch;
+    display:flex;
+  }
+  .menu{
+    height:100%;
+    align-items:stretch;
+  }
+  .menu__item{
+    height:100%;
+    align-items:stretch;
+  }
+  .menu__link{
+    height:100%;
+    display:flex;
+    align-items:center;
+    color:var(--fg);
+  }
+
+  /* Hover/open/focus states: dark bg + white text */
+  .menu__item:hover > .menu__link,
+  .menu__item.is-open > .menu__link,
+  .menu__item:focus-within > .menu__link{
+    background:var(--menu-hover-bg);
+    color:var(--menu-hover-fg);
+    opacity:1;
+  }
+  .menu__item:hover > .menu__link .menu__chev,
+  .menu__item.is-open > .menu__link .menu__chev,
+  .menu__item:focus-within > .menu__link .menu__chev{
+    opacity:1;
+  }
+
+  /* Active page: slightly softer dark bg but still white text */
+  .menu__link[aria-current="page"]{
+    background:color-mix(in oklab,var(--menu-hover-bg),var(--bg) 18%);
+    color:var(--menu-hover-fg);
+    opacity:1;
+  }
+}
+
+/* ===== Desktop: make menu items fill visible topbar (including previous padding) =====
+   The old topbar used vertical padding on .topbar__inner, which prevents children from
+   ever reaching the full header height. On desktop we move vertical space into a fixed
+   min-height and center contents, so .menu__item can truly be 100% height.
+*/
+@media (min-width:981px){
+  :root{ --topbar-min-h: 56px; }
+
+  .topbar{
+    min-height:var(--topbar-min-h);
+    align-items:stretch;
+  }
+
+  /* Remove vertical padding that creates "dead" space above/below the menu */
+  .topbar__inner{
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+    min-height:var(--topbar-min-h);
+  }
+
+  /* Keep brand/actions vertically centered within the bar */
+  .brand,
+  .topbar__actions{
+    display:flex;
+    align-items:center;
+    height:100%;
+  }
+
+  /* Menubar truly fills the bar */
+  .menubar,
+  .menu,
+  .menu__item,
+  .menu__link{
+    height:100%;
+  }
+
+  /* Give links comfortable horizontal padding; no vertical padding needed */
+  .menu__link{
+    padding:0 14px !important;
+  }
+}
+
+/* ===== Desktop menu spacing + underline removal ===== */
+@media (min-width:981px){
+  /* Remove horizontal gaps between items */
+  .menu{
+    gap:0 !important;
+  }
+  .menu__item{
+    margin:0 !important;
+  }
+
+  /* Ensure no residual underline styles on items without submenus */
+  .menu__item:not(.has-sub) > .menu__link{
+    background-image:none !important;
+    box-shadow:none !important;
+    text-decoration:none !important;
+  }
+
+  /* Active/hover state for non-dropdown items: background only */
+  .menu__item:not(.has-sub):hover > .menu__link,
+  .menu__item:not(.has-sub):focus-within > .menu__link,
+  .menu__item:not(.has-sub) > .menu__link[aria-current="page"]{
+    background:var(--menu-hover-bg);
+    color:var(--menu-hover-fg);
+  }
+}
+
+/* ===== Final desktop menu cleanup ===== */
+@media (min-width:981px){
+  /* Remove any remaining ::after indicator on current page links */
+  .menu__link[aria-current="page"]::after{
+    content:none !important;
+  }
+
+  /* Remove border-radius on hover/open states */
+  .menu__item:hover > .menu__link,
+  .menu__item.is-open > .menu__link,
+  .menu__item:focus-within > .menu__link{
+    border-radius:0 !important;
+  }
+}
+
+/* ===== Kill ALL ::after underline remnants on desktop menu ===== */
+@media (min-width:981px){
+  /* Absolutely nuke any pseudo-elements that could render bars */
+  .menu__link::after,
+  .menu__link::before,
+  .menu__item::after,
+  .menu__item::before,
+  .submenu__link::after,
+  .submenu__link::before{
+    content:none !important;
+    display:none !important;
+    background:none !important;
+    box-shadow:none !important;
+  }
+}
+
+/* ===== Desktop submenu themed like main menu ===== */
+@media (min-width:981px){
+  :root{ --submenu-min-h: 46px; }
+
+  /* Make the whole submenu bar match the active/hovered main menu background */
+  .menu__item.is-open > .submenu{
+    background:var(--menu-hover-bg) !important;
+    color:var(--menu-hover-fg) !important;
+  }
+
+  /* Submenu bar height + item fill */
+  .menu__item > .submenu{
+    min-height:var(--submenu-min-h);
+    padding:0 8px !important;        /* no vertical padding so children can fill */
+    align-items:stretch !important;
+    justify-content:center;
+  }
+
+  .submenu__item{
+    height:100%;
+    display:flex;
+    align-items:stretch;
+  }
+
+  .submenu__link{
+    height:100%;
+    display:flex;
+    align-items:center;
+    padding:0 14px !important;
+    color:var(--menu-hover-fg) !important;
+    opacity:1;
+    border-radius:0 !important;
+    background:transparent !important;
+  }
+
+  /* Hover/active in submenu: slightly lighter/darker blocks but same theme */
+  .submenu__item:hover > .submenu__link,
+  .submenu__item:focus-within > .submenu__link{
+    background:color-mix(in oklab,var(--menu-hover-bg),white 8%) !important;
+  }
+  .submenu__link[aria-current="page"]{
+    background:color-mix(in oklab,var(--menu-hover-bg),white 12%) !important;
+  }
+}
+
+/* ===== Desktop submenu final tweaks ===== */
+@media (min-width:981px){
+  /* Vertically center submenu items */
+  .menu__item > .submenu{
+    display:flex;
+    align-items:center !important;
+  }
+
+  .submenu__item{
+    display:flex;
+    align-items:center;
+  }
+
+  .submenu__link{
+    display:flex;
+    align-items:center;
+  }
+
+  /* Highlighted submenu item uses body background */
+  .submenu__item:hover > .submenu__link,
+  .submenu__item:focus-within > .submenu__link,
+  .submenu__link[aria-current="page"]{
+    background:var(--bg) !important;
+    color:var(--menu-hover-fg) !important;
+  }
+}
+
+/* ===== Desktop submenu height + contrast fixes ===== */
+@media (min-width:981px){
+  /* Ensure submenu bar has a definite height */
+  :root{
+    --submenu-h: 56px; /* match topbar height */
+  }
+
+  .menu__item > .submenu{
+    height:var(--submenu-h);
+    min-height:var(--submenu-h);
+    padding:0 !important;
+    align-items:stretch !important;
+  }
+
+  /* Make each submenu item fill the bar vertically */
+  .submenu__item{
+    height:100%;
+    align-items:stretch;
+  }
+
+  .submenu__link{
+    height:100%;
+    display:flex;
+    align-items:center;
+    padding:0 14px !important;
+  }
+
+  /* Hovered/active submenu item uses body bg AND readable text */
+  .submenu__item:hover > .submenu__link,
+  .submenu__item:focus-within > .submenu__link,
+  .submenu__link[aria-current="page"]{
+    background:var(--bg) !important;
+    color:var(--fg) !important; /* readable against light bg */
+  }
+}
+
+/* ===== Desktop submenu: tighter + shorter ===== */
+@media (min-width:981px){
+  :root{
+    --submenu-h: 44px; /* shorter than topbar */
+  }
+
+  /* Remove all internal spacing on submenu bar */
+  .menu__item > .submenu{
+    height:var(--submenu-h);
+    min-height:var(--submenu-h);
+    padding:0 !important;
+    margin:0 !important;
+    gap:0 !important;
+    align-items:stretch !important;
+  }
+
+  /* Remove spacing around submenu items */
+  .submenu__item{
+    height:100%;
+    margin:0 !important;
+    padding:0 !important;
+    align-items:stretch;
+  }
+
+  .submenu__link{
+    height:100%;
+    margin:0 !important;
+    padding:0 12px !important; /* horizontal only */
+    line-height:1;
+    align-items:center;
+  }
+}
+
+/* ===== Desktop submenu: remove borders entirely ===== */
+@media (min-width:981px){
+  .menu__item > .submenu{
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+}
+
+/* ===== Mobile/Tablet: square theme for drawer + accordion ===== */
+@media (max-width:980px){
+  /* Drawer panel + overlay */
+  .drawer__inner{
+    border-radius:0 !important;
+  }
+  .drawer__head{
+    border-radius:0 !important;
+  }
+
+  /* Accordion containers */
+  .acc{
+    border-radius:0 !important;
+  }
+  .acc__top{
+    border-radius:0 !important;
+  }
+  .acc__panel{
+    border-radius:0 !important;
+  }
+
+  /* Links inside drawer (including notebook, leaf, children) */
+  .drawer__leaf,
+  .acc__child,
+  .drawer__link{
+    border-radius:0 !important;
+  }
+
+  /* Remove any pill-like rounding on icon buttons in the header */
+  .iconbtn{
+    border-radius:0 !important;
+  }
+
+  /* Tighten up "cardy" feel by reducing extra shadows */
+  .drawer__inner{
+    box-shadow:none !important;
+  }
+  .drawer__leaf,
+  .acc,
+  .acc__child{
+    box-shadow:none !important;
+  }
+}
+
+/* ===== Mobile/Tablet: remove vertical spacing between sub-menu items ===== */
+@media (max-width:980px){
+  /* Accordion child list spacing */
+  .acc__panel{
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+  }
+
+  /* Individual sub-menu items */
+  .acc__child{
+    margin:0 !important;
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+  }
+
+  /* Links inside sub-menu items */
+  .acc__child > a,
+  .acc__child .drawer__link{
+    margin:0 !important;
+    padding-top:12px;   /* keep tap target, but no extra gaps */
+    padding-bottom:12px;
+  }
+}
+
+/* ===== Mobile/Tablet: completely zero acc__panel spacing ===== */
+@media (max-width:980px){
+  .acc__panel{
+    padding:0 !important;
+    margin:0 !important;
+    gap:0 !important;
+  }
+
+  .acc__panel > *{
+    margin:0 !important;
+  }
+}
