@@ -1,0 +1,56 @@
+.cv-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.cv-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 20px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.cv-line {
+  margin: 0;
+}
+
+.cv-org {
+  font-weight: 700;
+}
+
+.cv-location {
+  font-weight: 400;
+}
+
+.cv-role {
+  margin: 4px 0 0 0;
+}
+
+.cv-dates {
+  margin: 0;
+  opacity: 0.8;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cv-list {
+  margin: 8px 0 0 0;
+  padding-left: 18px;
+}
+
+.cv-list li + li {
+  margin-top: 4px;
+}
+
+@media (max-width: 700px) {
+  .cv-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-dates {
+    text-align: left;
+  }
+}

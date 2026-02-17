@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% load static %}
+{% load notebook_extras %}
+
+{% block title %}{% if entry.title %}{{ entry.title }}{% else %}Notebook Entry{% endif %}{% endblock %}
+
+{% block body %}
+<style>
+  /* Notebook-ish look */
+  .nb-wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 18px 60px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+                 "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  }
+  .nb-topbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .nb-title {
+    font-size: 30px;
+    line-height: 1.15;
+    font-weight: 650;
+    margin: 0;
+    word-break: break-word;
+  }
+  .nb-subtitle {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    font-size: 13px;
+    opacity: 0.78;
+  }
+  .nb-meta-pill {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.06);
+  }
+  .nb-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .nb-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: rgba(0,0,0,0.06);
+    text-decoration: none;
+    color: inherit;
+  }
+  .nb-card {
+    margin-top: 18px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .nb-cellbar {
+    padding: 10px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.02);
+    font-size: 12px;
+    opacity: 0.9;
+  }
+  .nb-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.25);
+    display: inline-block;
+  }
+  .nb-dot:nth-child(1){ opacity: .35; }
+  .nb-dot:nth-child(2){ opacity: .55; }
+  .nb-dot:nth-child(3){ opacity: .75; }
+
+  /* Rendered HTML area (your Quarto/Jupyter fragment) */
+  .nb-body {
+    padding: 18px 18px 22px;
+  }
+
+  /* Improve typical prose readability */
+  .nb-body :is(h1,h2,h3) { margin-top: 1.2em; }
+  .nb-body p { line-height: 1.6; }
+  .nb-body pre, .nb-body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+                 "Courier New", monospace;
+  }
+  .nb-body pre {
+    overflow: auto;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .nb-body blockquote {
+    margin: 14px 0;
+    padding: 10px 14px;
+    border-left: 4px solid rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.03);
+    border-radius: 10px;
+  }
+  .nb-body table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .nb-body th, .nb-body td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    vertical-align: top;
+  }
+
+  /* Small footer/meta */
+  .nb-footer {
+    margin-top: 14px;
+    font-size: 12px;
+    opacity: 0.75;
+    display: grid;
+    gap: 6px;
+  }
+  .nb-kv {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .nb-k { min-width: 140px; font-weight: 600; opacity: 0.85; }
+  .nb-v { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  .nb-actions a {
+    font-size: 13px;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.03);
+    color: inherit;
+  }
+  .nb-actions a:hover { background: rgba(0,0,0,0.06); }
+</style>
+
+<div class="nb-wrap">
+  <div class="nb-topbar">
+    <div>
+      <h1 class="nb-title">{{ entry.title|default:"Untitled entry" }}</h1>
+
+      <div class="nb-subtitle">
+        {% if entry.slug %}
+          <span class="nb-meta-pill">
+            <strong>slug</strong> <span class="nb-v">{{ entry.slug }}</span>
+          </span>
+        {% endif %}
+      </div>
+
+      {% if entry.tags %}
+      <div class="nb-tags">
+        {% for t in entry.tags|ensure_list %}
+          {# optional: link to a tag-filtered list page if you have one #}
+          <a class="nb-tag" href="{% url 'pages:entry_list' %}?tag={{ t|urlencode }}">{{ t }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="nb-actions">
+      {# optional admin/edit links #}
+      <!--<a href="{#% url 'admin:yourapp_notebookentry_change' entry.id %#}">Edit in admin</a>-->
+    </div>
+  </div>
+
+  <div class="nb-card">
+    <div class="nb-body">
+      {{ entry.html|safe }}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load notebook_extras %}
+
+{% block title %}Notebook{% endblock %}
+
+{% block body %}
+<style>
+  .nb-list-wrap { max-width: 980px; margin: 0 auto; padding: 24px 18px 60px; }
+  .nb-list-head { display:flex; justify-content:space-between; align-items:end; gap:14px; margin-bottom:14px; }
+  .nb-search { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .nb-search input {
+    padding: 10px 12px; border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.12);
+    width: 320px; max-width: 65vw;
+  }
+  .nb-card {
+    border-radius: 16px; background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+  .nb-row { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .nb-title { font-size: 18px; margin: 0; }
+  .nb-title a { text-decoration:none; color:inherit; }
+  .nb-muted { font-size: 12px; opacity: 0.75; margin-top: 6px; display:flex; gap:10px; flex-wrap:wrap; }
+  .nb-tags { display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; }
+  .nb-tag { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(0,0,0,0.06); text-decoration:none; color:inherit; }
+</style>
+
+<div class="nb-list-wrap">
+  <div class="nb-list-head">
+    <div>
+      <h1 style="margin:0;">Notebook</h1>
+      <div style="opacity:.75; font-size:13px; margin-top:6px;">
+        {{ page_obj.paginator.count }} entries
+      </div>
+    </div>
+
+    <form class="nb-search" method="get">
+      <input name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search title / slug / doc_key…" />
+      <input name="tag" value="{{ request.GET.tag|default:'' }}" placeholder="tag (optional)" />
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  {% for entry in page_obj.object_list %}
+    <div class="nb-card">
+      <div class="nb-row">
+        <div>
+          <h2 class="nb-title">
+            <a href="{% url 'pages:entry_detail' slug=entry.slug %}">
+              {{ entry.title|default:"Untitled entry" }}
+            </a>
+          </h2>
+          <div class="nb-muted">
+            <span><strong>slug</strong> {{ entry.slug|default:"(none)" }}</span>
+            <span><strong>server_updated_at</strong> {{ entry.server_updated_at|date:"Y-m-d H:i" }}</span>
+          </div>
+
+          {% if entry.tags %}
+          <div class="nb-tags">
+            {% for t in entry.tags|ensure_list %}
+              <a class="nb-tag" href="?tag={{ t|urlencode }}">{{ t }}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No entries found.</p>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <div style="margin-top:16px; display:flex; gap:10px; align-items:center;">
+      {% if page_obj.has_previous %}
+        <a href="?{% querystring request page=page_obj.previous_page_number %}">← Prev</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?{% querystring request page=page_obj.next_page_number %}">Next →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
