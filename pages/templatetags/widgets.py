@@ -13,7 +13,16 @@ def biography_widget(context, title: str = "About", bio: Optional[str] = None, l
     profile = context.get("site_profile", {}) or {}
     bio_text = bio if bio is not None else profile.get("bio", "")
     link_list = list(links) if links is not None else list(profile.get("links", []) or [])
-    return {"title": title, "bio": bio_text, "links": link_list}
+    return {
+        "title": title,
+        "name": profile.get("name", ""),
+        "headline": profile.get("headline", ""),
+        "bio": bio_text,
+        "location": profile.get("location", ""),
+        "email": profile.get("email", ""),
+        "avatar_url": profile.get("avatar_url", ""),
+        "links": link_list,
+    }
 
 
 @register.inclusion_tag("pages/widgets/categories.html", takes_context=True)

@@ -49,20 +49,21 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .content{grid-area:content;min-width:0}
 .rail--right{grid-area:right}
 
-/* Desktop: 3 columns */
-.layout{max-width:1120px;margin:0 auto;padding:22px 18px 56px 18px;display:grid;grid-template-columns:260px minmax(0,1fr) 260px;grid-template-areas:"left content right";gap:22px}
-.layout--wide{grid-template-columns:280px minmax(0,1fr) 240px;grid-template-areas:"left content right"}
+/* Desktop: 2 columns (left rail + content) */
+.layout{max-width:1120px;margin:0 auto;padding:22px 18px 56px 18px;display:grid;grid-template-columns:260px minmax(0,1fr);grid-template-areas:"left content";gap:22px}
+.layout--wide{grid-template-columns:260px minmax(0,1fr);grid-template-areas:"left content"}
 .rail{position:sticky;top:74px;align-self:start;max-height:calc(100vh - 94px);overflow:auto;padding-right:4px}
 .rail__title{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:10px 0 12px 0}
 .rail__nav{display:grid;gap:6px;margin-bottom:16px}
 .rail__nav a{color:var(--fg);opacity:.84;padding:8px 10px;border-radius:12px;border:1px solid transparent}
 .rail__nav a:hover{text-decoration:none;opacity:1;background:var(--card);border-color:var(--hair)}
+.rail--right{display:none!important}
 
-/* Tablet-ish: rails on top row, content spans below */
+/* Tablet-ish: keep left rail + content */
 @media (max-width:980px){
-  .layout,.layout--wide{grid-template-columns:1fr 1fr;grid-template-areas:"left right" "content content";align-items:start}
+  .layout,.layout--wide{grid-template-columns:1fr 1fr;grid-template-areas:"left content";align-items:start}
   .rail{position:relative;top:auto;max-height:none;overflow:visible}
-  .rail--right{display:block}
+  .rail--right{display:none!important}
   .nav{display:none}
   .iconbtn--menu{display:inline-flex}
 }
@@ -115,6 +116,71 @@ pre{padding:14px;border:1px solid var(--hair);background:color-mix(in oklab,var(
 .chip:hover{opacity:1;text-decoration:none}
 .chip.is-active{border-color:color-mix(in oklab,var(--accent),var(--hair) 35%);box-shadow:0 0 0 3px color-mix(in oklab,var(--accent),transparent 82%);opacity:1}
 .pagefoot{margin-top:26px}
+
+/* Profile rail card */
+.profile-card{display:grid;gap:10px}
+.profile-card__avatar{
+  width:96px;
+  height:96px;
+  border-radius:999px;
+  object-fit:cover;
+  border:1px solid var(--hair);
+}
+.profile-card__name{
+  font-weight:700;
+  letter-spacing:-0.01em;
+}
+.profile-card__headline{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
+.profile-card__meta{
+  display:grid;
+  gap:6px;
+  font-size:13px;
+  color:var(--muted);
+}
+.profile-card__links a{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--hair);
+  color:var(--fg);
+  text-decoration:none;
+  background:color-mix(in oklab,var(--card),transparent 12%);
+}
+.profile-card__links a:hover{
+  text-decoration:none;
+  background:color-mix(in oklab,var(--card),transparent 0%);
+}
+.profile-card__link-icon{
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--hair);
+  background:var(--bg);
+  color:var(--muted);
+  font-size:11px;
+  line-height:1;
+  font-weight:700;
+  text-transform:lowercase;
+}
+.profile-card__link-iconimg{
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  object-fit:cover;
+  border:1px solid var(--hair);
+  background:var(--bg);
+}
 
 /* ===== Menu system ===== */
 

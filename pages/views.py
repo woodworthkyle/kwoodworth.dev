@@ -3,12 +3,49 @@ from __future__ import annotations
 from pathlib import Path
 from django.conf import settings
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Post, Tag
+from contentapi.models import Doc
 
 HTML_EXTS = {".html", ".htm"}
 
+from django.core.paginator import Paginator
+from django.db.models import Q
+
+def entry_detail(request, slug):
+    entry = get_object_or_404(Doc, slug=slug)
+    return render(request, "notebook/entry_detail.html", {"entry": entry})
+
+def entry_list(request):
+    q = (request.GET.get("q") or "").strip()
+    tag = (request.GET.get("tag") or "").strip()
+
+    qs = Doc.objects.all().order_by("-server_updated_at")
+    print(qs)
+
+    if q:
+        print("Filtering by q:", q)
+        qs = qs.filter(
+            Q(title__icontains=q) |
+            Q(slug__icontains=q) |
+            Q(doc_key__icontains=q)
+        )
+
+    if tag:
+        print("Filtering by tag:", tag)
+        # works well on Postgres; SQLite JSON behavior may vary
+        qs = qs.filter(tags__contains=[tag])
+    print(qs)
+
+    paginator = Paginator(qs, 20)
+    page = paginator.get_page(request.GET.get("page") or 1)
+
+    print(page.object_list)
+    return render(request, "notebook/entry_list.html", {
+        "page_obj": page,
+        "is_paginated": page.has_other_pages(),
+    })
 
 def _safe_join(root: Path, req_path: str) -> Path:
     candidate = (root / req_path).resolve()
@@ -23,20 +60,7 @@ def _read_html(p: Path) -> str:
 
 
 def home(request):
-    root = settings.CONTENT_ROOT
-    home_dir = root / "home"
-    index = home_dir / "index.html"
-    if index.exists():
-        return render(
-            request,
-            "pages/content_file.html",
-            {
-                "title": "Home",
-                "html": _read_html(index),
-                "breadcrumbs": [("Home", "/")],
-            },
-        )
-    return render(request, "pages/home_fallback.html")
+    return redirect("/about.html")
 
 
 def posts(request):

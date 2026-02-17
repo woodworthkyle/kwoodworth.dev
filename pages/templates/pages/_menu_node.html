@@ -1,8 +1,8 @@
 <li class="submenu__item {% if node.children %}has-sub{% endif %}">
-  <a class="submenu__link" href="{{ node.url }}" {% if request.path == node.url %}aria-current="page"{% endif %}>{{ node.title }}</a>
+  <a class="submenu__link" href="{{ node.url }}" {% if request.path == node.url %}aria-current="page"{% endif %}>{{ node.title|lower }}</a>
 
   {% if node.children %}
-    <ul class="submenu submenu--nested" aria-label="{{ node.title }} submenu">
+    <ul class="submenu submenu--nested" aria-label="{{ node.title|lower }} submenu">
       {% for child in node.children %}
         {% include "pages/_menu_node.html" with node=child %}
       {% endfor %}

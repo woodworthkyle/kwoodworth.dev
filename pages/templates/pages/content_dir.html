@@ -1,20 +1,10 @@
 {% extends "base.html" %}
+{% load widgets %}
 {% block title %}{{ title }} — Your Name{% endblock %}
 {% block body %}
 <main class="layout">
   <aside class="rail rail--left" aria-label="Breadcrumbs">
-    <div class="rail__title">Path</div>
-    <nav class="rail__nav">
-      {% for label,url in breadcrumbs %}
-        <a href="{{ url }}">{{ label }}</a>
-      {% endfor %}
-    </nav>
-
-    <div class="card subtle">
-      <div class="meta">Directory</div>
-      <p class="muted"><code>{{ dir_path }}</code></p>
-      <p class="muted">No <code>index.html</code> found — listing contents.</p>
-    </div>
+    {% biography_widget title="Bio" %}
   </aside>
 
   <article id="content" class="content prose">
@@ -40,7 +30,7 @@
 
     <footer class="pagefoot">
       <div class="divider"></div>
-      <p class="muted">© <span id="year"></span> Your Name.</p>
+      <p class="muted">© <span id="year"></span> {{ site_footer.owner_name }}. Last updated: {{ site_footer.last_updated }}.</p>
     </footer>
   </article>
 

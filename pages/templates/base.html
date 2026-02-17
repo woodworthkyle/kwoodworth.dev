@@ -14,27 +14,27 @@
   <header class="topbar">
     <div class="topbar__inner">
       <div class="brand">
-        <a class="brand__title" href="/">Your Name</a>
+        <a class="brand__title" href="/about.html">Kyle Woodworth</a>
       </div>
 
       <nav class="menubar" aria-label="Primary">
         <ul class="menu">
           {% for item in site_nav_tree %}
-            <li class="menu__item {% if item.children %}has-sub{% endif %}">
-              <a class="menu__link" href="{{ item.url }}" {% if request.path == item.url %}aria-current="page"{% endif %}>{{ item.title }}{% if item.children %}<span class="menu__chev" aria-hidden="true">▾</span>{% endif %}</a>
-              {% if item.children %}
-                <ul class="submenu" aria-label="{{ item.title }} submenu">
-                  {% for child in item.children %}
-                    {% include "pages/_menu_node.html" with node=child %}
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </li>
+            {% if item.title != "Home" and item.title != "About" and item.title != "Teaching" %}
+              <li class="menu__item {% if item.children %}has-sub{% endif %}">
+                <a class="menu__link" href="{{ item.url }}" {% if request.path == item.url %}aria-current="page"{% endif %}>{{ item.title|lower }}{% if item.children %}<span class="menu__chev" aria-hidden="true">▾</span>{% endif %}</a>
+                {% if item.children %}
+                  <ul class="submenu" aria-label="{{ item.title|lower }} submenu">
+                    {% for child in item.children %}
+                      {% include "pages/_menu_node.html" with node=child %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endif %}
           {% endfor %}
 
-          <li class="menu__item">
-            <a class="menu__link" href="{% url 'pages:posts' %}" {% if request.resolver_match.url_name == 'posts' %}aria-current="page"{% endif %}>The Notebook</a>
-          </li>
+          {# Notebook link hidden in top nav #}
         </ul>
       </nav>
 
@@ -64,7 +64,9 @@
 
   <script>
     window.__NAV_TREE__ = {{ site_nav_tree_json|safe }};
-    window.__NAV_TREE__.push({title: 'The Notebook', url: '{% url "pages:posts" %}', children: []});
+    window.__NAV_TREE__ = window.__NAV_TREE__.filter(function(item) {
+      return item.title !== 'Home' && item.title !== 'About' && item.title !== 'Teaching';
+    });
   </script>
   <script src="{% static 'pages/js/site.js' %}"></script>
 </body>

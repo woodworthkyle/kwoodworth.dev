@@ -72,6 +72,10 @@ def upsert_doc(request):
             doc.server_version += 1
             doc.save()
 
+        print(doc.title)
+        print(doc.slug)
+        print(doc.html)
+
         return Response(
             {"status": "created" if created else "updated", "server_version": doc.server_version},
             status=status.HTTP_200_OK,

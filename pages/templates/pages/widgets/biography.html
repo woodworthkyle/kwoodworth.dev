@@ -1,12 +1,45 @@
+{% load static %}
 <div class="rail__title">{{ title }}</div>
-<div class="card subtle">
+<div class="card profile-card">
+  <img
+    class="profile-card__avatar"
+    src="{% if avatar_url %}{{ avatar_url }}{% else %}{% static 'pages/img/profile-placeholder.svg' %}{% endif %}"
+    alt="{% if name %}{{ name }}{% else %}Profile photo{% endif %}"
+    loading="lazy"
+  />
+
+  {% if name %}
+    <div class="profile-card__name">{{ name }}</div>
+  {% endif %}
+
+  {% if headline %}
+    <p class="profile-card__headline">{{ headline }}</p>
+  {% endif %}
+
   {% if bio %}
     <p class="muted">{{ bio }}</p>
   {% endif %}
+
+  <div class="profile-card__meta">
+    {% if location %}
+      <div><strong>location:</strong> {{ location }}</div>
+    {% endif %}
+    {% if email %}
+      <div><strong>email:</strong> <a href="mailto:{{ email }}">{{ email }}</a></div>
+    {% endif %}
+  </div>
+
   {% if links %}
-    <div class="stack">
+    <div class="stack profile-card__links">
       {% for l in links %}
-        <a href="{{ l.href }}"{% if l.external %} rel="noopener" target="_blank"{% endif %}>{{ l.label }}</a>
+        <a href="{{ l.href }}"{% if l.external %} rel="noopener" target="_blank"{% endif %}>
+          {% if l.icon_url %}
+            <img class="profile-card__link-iconimg" src="{{ l.icon_url }}" alt="" loading="lazy" />
+          {% elif l.icon %}
+            <span class="profile-card__link-icon">{{ l.icon }}</span>
+          {% endif %}
+          <span>{{ l.label|lower }}</span>
+        </a>
       {% endfor %}
     </div>
   {% endif %}

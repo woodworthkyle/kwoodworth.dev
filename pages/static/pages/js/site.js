@@ -34,6 +34,7 @@ window.addEventListener('resize', setTopbarHeightVar);
   const drawer = document.getElementById("drawer");
   const drawerNav = document.getElementById("drawerNav");
   const navTree = window.__NAV_TREE__ || [];
+  const lower = (s) => String(s || "").toLowerCase();
 
   function openDrawer() {
     if (!drawer) return;
@@ -87,18 +88,18 @@ window.addEventListener('resize', setTopbarHeightVar);
     const hasKids = node.children && node.children.length;
     const indentClass = depth > 0 ? " acc__child--indent" : "";
     if (!hasKids) {
-      return `<a class="drawer__leaf${indentClass}" href="${escAttr(node.url)}">${escHtml(node.title)}</a>`;
+      return `<a class="drawer__leaf${indentClass}" href="${escAttr(node.url)}">${escHtml(lower(node.title))}</a>`;
     }
     const id = "acc_" + hash(node.url);
     const kids = node.children.map((c) => renderChild(c, depth + 1)).join("");
     return `
       <section class="acc" data-acc="${escAttr(id)}" aria-expanded="false">
         <button class="acc__top" type="button" data-acc-toggle="${escAttr(id)}">
-          <span>${escHtml(node.title)}</span>
+          <span>${escHtml(lower(node.title))}</span>
           <span class="acc__chev">▾</span>
         </button>
         <div class="acc__panel">
-          <a class="acc__child" href="${escAttr(node.url)}">${escHtml(node.title)} overview</a>
+          <a class="acc__child" href="${escAttr(node.url)}">${escHtml(lower(node.title))} overview</a>
           ${kids}
         </div>
       </section>
@@ -109,18 +110,18 @@ window.addEventListener('resize', setTopbarHeightVar);
     const hasKids = node.children && node.children.length;
     const indentClass = depth > 0 ? " acc__child--indent" : "";
     if (!hasKids) {
-      return `<a class="acc__child${indentClass}" href="${escAttr(node.url)}">${escHtml(node.title)}</a>`;
+      return `<a class="acc__child${indentClass}" href="${escAttr(node.url)}">${escHtml(lower(node.title))}</a>`;
     }
     const id = "acc_" + hash(node.url);
     const kids = node.children.map((c) => renderChild(c, depth + 1)).join("");
     return `
       <div class="acc" data-acc="${escAttr(id)}" aria-expanded="false">
         <button class="acc__top" type="button" data-acc-toggle="${escAttr(id)}">
-          <span>${escHtml(node.title)}</span>
+          <span>${escHtml(lower(node.title))}</span>
           <span class="acc__chev">▾</span>
         </button>
         <div class="acc__panel">
-          <a class="acc__child${indentClass}" href="${escAttr(node.url)}">${escHtml(node.title)} overview</a>
+          <a class="acc__child${indentClass}" href="${escAttr(node.url)}">${escHtml(lower(node.title))} overview</a>
           ${kids}
         </div>
       </div>
